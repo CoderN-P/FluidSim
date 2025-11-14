@@ -35,7 +35,7 @@ public class FluidSim : MonoBehaviour
         {
             for (int j = 0; j <= height+1; j++)
             {
-                if (i < 0 || i > width || j < 0 || j > height)
+                if (i <= 0 || i > width || j <= 0 || j > height)
                 {
                     solid[i][j] = 0; // Boundary cells are solid
                 }

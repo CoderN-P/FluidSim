@@ -1,26 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using Subsystems;
 using UnityEngine;
 
-public class GridDemo : MonoBehaviour
+public class FluidDemoManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    
-    public int width = 20;
-    public int lineThickness = 5;
-    float cellSize; // Size of each cell in world units
-    Vector2[][] velocity; // [width][height] velocity field (Staggered) 
+    [Header("Grid")]
+    public FluidGrid grid;
 
-    
-    
-    void Start()
+    [Header("Subsystems")]
+    public VelocitySolver velocitySolver;
+    public FluidRenderer fluidRenderer;
+
+    void Awake()
     {
-        
+        grid = new FluidGrid();
+        grid.InitializeVelocities();
+        // Initialize all subsystems and inject shared data
+        velocitySolver.Init(grid);
+        fluidRenderer.Init(grid);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // inputHandler.HandleInput();    // drag, add velocity, density, etc.
+        velocitySolver.Step();         // diffuse, advect velocity
+        fluidRenderer.Render();        // draw current state
     }
 }
