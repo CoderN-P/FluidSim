@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace Subsystems
+namespace GridDemo1
 {
     public class VelocitySolver : MonoBehaviour
     {

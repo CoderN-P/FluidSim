@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Subsystems
+namespace GridDemo1
 {
 
     public class FluidRenderer : MonoBehaviour
@@ -16,6 +16,7 @@ namespace Subsystems
         private TMP_Text[,] texts;
         private LineRenderer[,] uLines;
         private LineRenderer[,] vLines;
+        private LineRenderer[,] velocityLines;
         private float cellSize;
         private float paddingX;
         private float paddingY;
@@ -50,8 +51,8 @@ namespace Subsystems
                 {
                     GameObject cellObj = Instantiate(cellPrefab, transform);
                     cellObj.transform.position = new Vector3(paddingX + x * cellSize, paddingY + y * cellSize, 0);
-                    cellObj.transform.localScale = Vector3.one * cellSize * (1 - g.gapRatio);
-                    // cellObj.transform.localScale = Vector3.one*cellSize;
+                    // cellObj.transform.localScale = Vector3.one * cellSize * (1 - g.gapRatio);
+                    cellObj.transform.localScale = Vector3.one*cellSize;
                     cells[x, g.height+1-y] = cellObj.GetComponent<SpriteRenderer>();
 
                     TMP_Text text = Instantiate(textPrefab, transform);
@@ -64,6 +65,7 @@ namespace Subsystems
             }
             
             InitializeLines();
+            InitializeVelocityLines();
         }
 
         void InitializeLines()
@@ -129,21 +131,43 @@ namespace Subsystems
             }
         }
 
+        void InitializeVelocityLines()
+        {
+            velocityLines = new LineRenderer[(grid.width+2)*4, (grid.height+2)*4];
+            
+            for (int i = 0; i < (grid.width + 2) * 4; i++)
+            {
+                for (int j = 0; j < (grid.height + 2) * 4; j++)
+                {
+                    var line = Instantiate(lineVelocityPrefab, transform);
+                    velocityLines[i, j] = line.GetComponent<LineRenderer>();
+                }
+            }
+        }
         void RenderVelocityLines()
         {
             float spacing = cellSize / 4;
             
-            for (float x = 0; x <= (grid.width + 2) * cellSize; x += spacing)
+            for (float x = 0; x < (grid.width + 2) * cellSize; x += spacing)
             {
-                for (float y = 0; y <= (grid.height + 2) * cellSize; y += spacing)
+                for (float y = (grid.height + 1) * cellSize; y >= 0; y -= spacing)
                 {
+                    
                     Vector2 point = new Vector2(x, y);
                     Vector2 vel = CalculateVelocityAtPoint(point);
                     
                     if (vel == Vector2.negativeInfinity)
                         continue;
-                    Debug.DrawLine(new Vector3(paddingX + point.x, paddingY + point.y, 0),
-                        new Vector3(paddingX + point.x + vel.x * 0.1f, paddingY + point.y + vel.y * 0.1f, 0), Color.red);
+                    
+                    Vector2 start = new Vector3(paddingX - cellSize/2 + point.x, paddingY + cellSize/2 + point.y, 0);
+                    Vector2 end =  new Vector3(vel.x * 0.1f, vel.y * 0.1f, 0);
+                    end += start;
+                    
+                    int i = (int)(x / spacing);
+                    int j = (int)(((grid.height+1)- y) / spacing);
+                    
+                    velocityLines[i, j].SetPosition(0, start);
+                    velocityLines[i, j].SetPosition(1, end);
                 }
             }
         }
