@@ -48,6 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 9050445386159563591}
   arrowHead: {fileID: 9018059903232612180}
+  maxLength: 1
+  thicknessFactor: 0.07
+  scale: 1
 --- !u!1 &7666088159184239784
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,8 +148,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.5054016, b: 1, a: 1}
-      key1: {r: 0, g: 0.5054016, b: 1, a: 1}
+      key0: {r: 0.018422913, g: 0.018648028, b: 0.01886791, a: 1}
+      key1: {r: 0.018422913, g: 0.018648028, b: 0.01886791, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -258,7 +261,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 0, g: 0.5058824, b: 1, a: 1}
+  m_Color: {r: 0.018422913, g: 0.018648028, b: 0.01886791, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

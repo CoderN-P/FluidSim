@@ -5,12 +5,11 @@ namespace GridDemo2
     public class FluidRenderer2 : MonoBehaviour
     {
         public FluidGrid grid;
-        public int velocityResolution = 4; // 4 velocity lines per cell width and height -> 16 lines per cell
+        public int velocityResolution = 2; // 4 velocity lines per cell width and height -> 16 lines per cell
         public int padding = 0; // Padding around velocity grid
-        public float cellSize = 3f;
+        public float cellSize = 2f;
         public GameObject vectorHandlePrefab;
         public GameObject velocityArrowPrefab;
-        public Camera cameraObject;
         
         private float gridOffsetX;
         private VectorHandle[,] uLines;
@@ -86,6 +85,26 @@ namespace GridDemo2
 
             if (Input.GetMouseButtonUp(0))
                 activeHandle = null;
+        }
+        
+        public void ApplyBrush(Vector2 pos, float radius, Vector2 lastPos)
+        {
+            // Apply velocity brush at position pos with given radius based on delta from lastPos
+         
+            for (int i = 1; i <= grid.width; i++)
+            {
+                for (int j = 1; j <= grid.height; j++)
+                {
+                    Vector2 cellPos = IndexToWorldPos(new Vector2(i, j));
+                    float dist = Vector2.Distance(pos, cellPos);
+                    if (dist < radius)
+                    {
+                        Vector2 delta = pos - lastPos;
+                        float strength = (radius - dist) / radius; // Linear falloff
+                        grid.velocity[i, j] += delta * strength * 5f; // Apply velocity change
+                    }
+                }
+            }
         }
         
         
